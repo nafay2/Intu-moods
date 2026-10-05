@@ -411,6 +411,27 @@ footer b{font-family:var(--display);color:var(--text)}
 @media (prefers-reduced-motion:reduce){
   *:not(.bub):not(.sheep):not(.strip2),*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* lock screen */
+#gate{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:24px 16px;background:radial-gradient(90% 60% at 50% 0%,rgba(155,107,255,.35),transparent 70%),radial-gradient(80% 60% at 50% 100%,rgba(255,61,139,.3),transparent 70%),#07040d;transition:opacity .6s,transform .6s;overflow:auto}
+#gate.open{opacity:0;transform:scale(1.08);pointer-events:none}
+.gbox{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.glock{font-size:56px;line-height:1;animation:float 3s ease-in-out infinite}
+.gbox h1{font-size:clamp(34px,9vw,46px);font-weight:900}
+.gbox p{color:var(--mute);font-size:14.5px}
+.gdots{display:flex;gap:14px;margin:4px 0}
+.gdots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--line2);transition:background .2s,transform .2s,border-color .2s}
+.gdots i.on{background:var(--grad);border-color:transparent;transform:scale(1.15)}
+.gdots.bad{animation:shake .45s}
+.gdots.bad i{border-color:var(--pink)}
+.gdots.good i{background:var(--matcha);border-color:var(--matcha)}
+.gpad{display:grid;grid-template-columns:repeat(3,72px);gap:12px;justify-content:center}
+.gk{width:72px;height:72px;border-radius:50%;border:1px solid var(--line2);background:rgba(255,255,255,.05);font:700 24px var(--display);cursor:pointer;transition:background .15s,transform .1s}
+.gk:hover{background:rgba(255,61,139,.18)}
+.gk:active{transform:scale(.9);background:var(--grad)}
+.gk.sm{font:700 13px var(--body);color:var(--mute)}
+.ghint{font:700 22px/1.1 var(--hand);color:var(--pink);min-height:1.2em}
+body.locked{overflow:hidden}
 </style>
 </head>
 <body>
@@ -422,6 +443,18 @@ footer b{font-family:var(--display);color:var(--text)}
 <div class="wash" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
+<div id="gate" role="dialog" aria-modal="true" aria-labelledby="gt1">
+  <div class="gbox">
+    <span class="glock" aria-hidden="true">🔒</span>
+    <span class="eyebrow">case file · classified</span>
+    <h1 id="gt1">Hey, <span class="gt">Intu</span></h1>
+    <p>This one is only for you. Enter the code to open it.</p>
+    <div class="gdots" id="gdots" aria-live="polite"><i></i><i></i><i></i><i></i></div>
+    <div class="gpad" id="gpad"></div>
+    <p class="ghint" id="ghint"></p>
+  </div>
+</div>
+
 
 <header>
   <div class="hwrap">
@@ -1165,6 +1198,26 @@ function journalPrompt(p){$('#jp').textContent=p}
   $('#relight').onclick=light;light();
 })();
 
+
+/* ---------- lock screen ---------- */
+(function(){
+  const gate=$('#gate');let open=false;try{open=localStorage.getItem('intu:unlocked')==='1'}catch(e){}
+  if(open){gate.remove();return}
+  document.body.classList.add('locked');
+  const dots=$$('#gdots i'),dw=$('#gdots'),pad=$('#gpad'),hint=$('#ghint');let code='',fails=0;
+  pad.innerHTML=['1','2','3','4','5','6','7','8','9','hint','0','⌫'].map(k=>`<button class="gk${k.length>1?' sm':''}" data-k="${k}" aria-label="${k==='⌫'?'delete':k}">${k}</button>`).join('');
+  function paint(){dots.forEach((d,i)=>d.classList.toggle('on',i<code.length))}
+  function press(k){if(open)return;
+    if(k==='⌫'){code=code.slice(0,-1);paint();return}
+    if(k==='hint'){hint.textContent='Your birthday. Month first.';return}
+    if(code.length>=4)return;code+=k;paint();
+    if(code.length===4){
+      if(code==='0516'){open=true;dw.classList.add('good');try{localStorage.setItem('intu:unlocked','1')}catch(e){}
+        setTimeout(()=>{conf(200,.5,.45);gate.classList.add('open');document.body.classList.remove('locked');setTimeout(()=>gate.remove(),700)},350)}
+      else{fails++;dw.classList.remove('bad');void dw.offsetWidth;dw.classList.add('bad');hint.textContent=fails>2?'Psst. Tap hint.':'Nope. Try again.';setTimeout(()=>{code='';paint();dw.classList.remove('bad')},450)}}}
+  pad.addEventListener('click',e=>{const b=e.target.closest('.gk');if(b)press(b.dataset.k)});
+  addEventListener('keydown',e=>{if(open)return;if(/^[0-9]$/.test(e.key))press(e.key);else if(e.key==='Backspace')press('⌫')});
+})();
 /* ---------- start ---------- */
 go(location.hash.slice(1)||'home');
 })();
