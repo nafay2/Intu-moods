@@ -1225,7 +1225,7 @@ function journalPrompt(p){$('#jp').textContent=p}
 
 /* ---------- lock screen ---------- */
 (function(){
-  const gate=$('#gate');let open=false;try{open=localStorage.getItem('intu:unlocked')==='1'}catch(e){}
+  const gate=$('#gate');let open=false;try{localStorage.removeItem('intu:unlocked');open=sessionStorage.getItem('intu:gate')==='1'}catch(e){}
   if(open){gate.remove();return}
   document.body.classList.add('locked');
   const dots=$$('#gdots i'),dw=$('#gdots'),pad=$('#gpad'),hint=$('#ghint');let code='',fails=0;
@@ -1236,7 +1236,7 @@ function journalPrompt(p){$('#jp').textContent=p}
     if(k==='hint'){hint.textContent='Your birthday. Month first.';return}
     if(code.length>=4)return;code+=k;paint();
     if(code.length===4){
-      if(code==='0516'){open=true;dw.classList.add('good');try{localStorage.setItem('intu:unlocked','1')}catch(e){}
+      if(code==='0516'){open=true;dw.classList.add('good');try{sessionStorage.setItem('intu:gate','1')}catch(e){}
         setTimeout(()=>{conf(200,.5,.45);gate.classList.add('open');document.body.classList.remove('locked');setTimeout(()=>gate.remove(),700)},350)}
       else{fails++;dw.classList.remove('bad');void dw.offsetWidth;dw.classList.add('bad');hint.textContent=fails>2?'Psst. Tap hint.':'Nope. Try again.';setTimeout(()=>{code='';paint();dw.classList.remove('bad')},450)}}}
   pad.addEventListener('click',e=>{const b=e.target.closest('.gk');if(b)press(b.dataset.k)});
