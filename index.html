@@ -91,7 +91,7 @@ textarea{resize:vertical;min-height:110px}
 .hero h1{font-weight:900;line-height:.86}
 .hero .hi{display:block;font-size:clamp(28px,6vw,52px);color:var(--mute);font-weight:700;margin-bottom:6px}
 .hero .name{display:block;font-size:clamp(84px,24vw,210px);cursor:pointer;user-select:none}
-.ch{display:inline-block;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;animation:pop .8s cubic-bezier(.3,1.6,.5,1) both}
+.ch{display:inline-block;background:linear-gradient(90deg,var(--pink),var(--violet),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent;animation:pop .8s cubic-bezier(.3,1.6,.5,1) both}
 .ch.wig{animation:wig .5s}
 @keyframes pop{from{opacity:0;transform:translateY(60%) rotate(-14deg) scale(.5)}}
 @keyframes wig{30%{transform:translateY(-14%) rotate(-8deg)}60%{transform:translateY(4%) rotate(5deg)}}
@@ -114,20 +114,50 @@ textarea{resize:vertical;min-height:110px}
 .sech{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 .sech h3{font-size:clamp(24px,4.6vw,36px);font-weight:900}
 
-/* moods */
-.moods{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:12px}
-.mood{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:var(--r);padding:18px 16px;min-height:156px;background:var(--panel);text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;gap:12px;transition:transform .3s cubic-bezier(.2,.8,.2,1),border-color .25s,box-shadow .3s;animation:tileIn .5s both}
-.mood::before{content:"";position:absolute;inset:0;background:linear-gradient(140deg,var(--c1),var(--c2));opacity:.17;transition:opacity .3s}
-.mood:hover{transform:translateY(-5px) rotate(-1.2deg);border-color:var(--c1);box-shadow:0 18px 40px -18px var(--c1)}
-.mood:hover::before{opacity:.38}
-.mood .em{font-size:40px;line-height:1;position:relative;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
-.mood:hover .em{transform:scale(1.22) rotate(-10deg)}
-.mood .nm{font:800 17px var(--display);position:relative;display:block}
-.mood .tg{font-size:13px;color:var(--mute);position:relative;display:block}
+/* mood boxes: same layout as Ishu's moods site (2 columns, centred, big emoji, name, line), in Intu's dark neon */
+.mhello{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;max-width:640px;margin:0 auto 24px}
+.mhello h2,.mhello h3{font-size:clamp(28px,6vw,46px);font-weight:900}
+.mhello p{color:var(--mute);max-width:44ch;font-size:14.5px}
+.greet{font:700 28px/1.1 var(--hand);color:var(--pink);display:inline-block;animation:bob 3s ease-in-out infinite}
+.moods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-width:640px;margin:0 auto}
+.mood{position:relative;overflow:hidden;isolation:isolate;border:1px solid rgba(255,255,255,.2);border-radius:30px;padding:26px 12px 22px;min-height:172px;
+  background:linear-gradient(150deg,color-mix(in srgb,var(--c1) 72%,#1a0f2e),color-mix(in srgb,var(--c1) 20%,#0d0718) 50%,color-mix(in srgb,var(--c2) 62%,#0f0820));background-size:180% 180%;
+  color:#fff;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  box-shadow:0 16px 36px -18px var(--c1),inset 0 1px 0 rgba(255,255,255,.28);
+  transition:transform .35s cubic-bezier(.3,1.5,.5,1),box-shadow .3s;animation:boxIn .6s cubic-bezier(.3,1.5,.5,1) both,grad 7s ease-in-out infinite alternate}
+.mood::before{content:"";position:absolute;left:-10%;right:-10%;top:-45%;height:90%;background:radial-gradient(closest-side,rgba(255,255,255,.25),transparent);z-index:-1;transition:transform .5s}
+.mood::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:40%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-18deg);animation:shine 5.5s ease-in-out infinite;animation-delay:var(--sd,0s);z-index:-1}
+.mood:hover{transform:translateY(-7px) scale(1.03) rotate(-1.5deg);box-shadow:0 26px 50px -16px var(--c1),0 0 0 2px rgba(255,255,255,.35),inset 0 1px 0 rgba(255,255,255,.3)}
+.mood:hover::before{transform:translateY(14%) scale(1.2)}
+.mood:active{transform:scale(.94)}
+.mood .em{font-size:48px;line-height:1;margin-bottom:6px;display:inline-block;filter:drop-shadow(0 6px 12px rgba(0,0,0,.4));animation:float 3s ease-in-out infinite;animation-delay:var(--bd,0s)}
+.mood:hover .em{animation:wig .6s}
+.mood .nm{font:800 18px/1.15 var(--display);display:block;text-shadow:0 2px 12px rgba(0,0,0,.35)}
+.mood .tg{font-size:12.5px;color:rgba(255,255,255,.8);display:block;line-height:1.3;max-width:20ch}
+.mfloat{position:absolute;inset:0;z-index:-1;pointer-events:none;overflow:hidden;border-radius:inherit}
+.mfloat span{position:absolute;bottom:-40px;font-size:16px;--o:.3;animation:driftUp linear infinite}
+@keyframes shine{0%,62%{left:-60%}100%{left:130%}}
+@keyframes grad{to{background-position:100% 100%}}
+@keyframes boxIn{from{opacity:0;transform:translateY(24px) scale(.85)}}
+
+/* livelier background */
+.aurora{position:fixed;left:-25vmax;right:-25vmax;top:-12vmax;height:75vmax;z-index:0;pointer-events:none;background:conic-gradient(from 0deg at 50% 50%,transparent 0 18%,color-mix(in srgb,var(--m1) 22%,transparent) 30%,transparent 42%,color-mix(in srgb,var(--m2) 24%,transparent) 55%,transparent 66%,rgba(103,232,249,.1) 78%,transparent 88%);filter:blur(60px);animation:spinz 28s linear infinite}
+.drifters{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.drifter{position:absolute;bottom:-60px;opacity:0;animation:driftUp linear infinite;will-change:transform}
+@keyframes driftUp{0%{transform:translate(0,0) rotate(0);opacity:0}10%{opacity:var(--o,.4)}85%{opacity:var(--o,.4)}100%{transform:translate(var(--dx,30px),-112vh) rotate(var(--rr,200deg));opacity:0}}
+.glow{position:fixed;z-index:0;width:460px;height:460px;margin:-230px 0 0 -230px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,color-mix(in srgb,var(--m1) 35%,transparent),transparent 65%);left:-600px;top:-600px;transition:left .25s ease-out,top .25s ease-out}
+.grain{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.spark{position:fixed;z-index:190;pointer-events:none;font-size:14px;color:var(--pink);text-shadow:0 0 8px currentColor;animation:sparkOut .8s ease-out forwards}
+@keyframes sparkOut{to{transform:translate(var(--sx),var(--sy)) scale(.2) rotate(120deg);opacity:0}}
+.wash{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(90% 60% at 20% 0%,var(--m1),transparent 70%),radial-gradient(80% 60% at 100% 100%,var(--m2),transparent 70%);opacity:0;transition:opacity .9s}
+body.inmood .wash{opacity:.3}
+.ch{background-size:200% 100%!important}
+.name.live .ch{animation:shimmer 3.5s linear infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
 @keyframes tileIn{from{opacity:0;transform:translateY(20px) scale(.95)}}
 
-.mdet{border-radius:28px;padding:24px 20px 26px;position:relative;overflow:hidden;border:1px solid var(--line);background:var(--panel);margin-top:20px}
-.mdet::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 0% 0%,var(--c1),transparent 60%),radial-gradient(100% 80% at 100% 100%,var(--c2),transparent 60%);opacity:.26;pointer-events:none}
+.mdet{border-radius:28px;padding:24px 20px 26px;position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.14);background:rgba(18,10,31,.5);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);margin-top:20px;box-shadow:0 30px 80px -40px var(--c1);animation:boxIn .6s cubic-bezier(.3,1.4,.5,1) both}
+.mdet::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 80% at 0% 0%,var(--c1),transparent 60%),radial-gradient(100% 80% at 100% 100%,var(--c2),transparent 60%);background-size:140% 140%;opacity:.34;pointer-events:none;animation:grad 8s ease-in-out infinite alternate}
 .mdet > *{position:relative}
 .mtop{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between;margin-bottom:14px}
 .big-em{font-size:clamp(56px,12vw,80px);line-height:1;display:inline-block;animation:float 3.2s ease-in-out infinite}
@@ -385,7 +415,12 @@ footer b{font-family:var(--display);color:var(--text)}
 </head>
 <body>
 <canvas id="bg" aria-hidden="true"></canvas>
+<div class="aurora" aria-hidden="true"></div>
 <div class="blobs" aria-hidden="true"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+<div class="drifters" id="drifters" aria-hidden="true"></div>
+<div class="glow" id="glow" aria-hidden="true"></div>
+<div class="wash" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
 <canvas id="fx" aria-hidden="true"></canvas>
 
 <header>
@@ -417,7 +452,7 @@ footer b{font-family:var(--display);color:var(--text)}
     </div>
 
     <div class="sec">
-      <div class="sech"><h3>How are we <span class="gt">feeling?</span></h3><span class="small">tap one, there's something inside each</span></div>
+      <div class="mhello"><span class="greet js-greet"></span><h3>How are you <span class="gt">feeling</span> right now?</h3><p>Pick one. There's a little room behind every box.</p></div>
       <div class="moods" id="homeMoods"></div>
     </div>
 
@@ -444,10 +479,10 @@ footer b{font-family:var(--display);color:var(--text)}
 
   <!-- MOODS -->
   <section class="view" id="v-moods">
-    <div class="vh" id="mhead">
-      <span class="eyebrow">Moods</span>
-      <h2>What kind of <span class="gt">day</span> is it?</h2>
-      <p>Pick the one that fits. Each mood has its own little room, with things to do in it. Nothing in here tells you what to do unless you press something.</p>
+    <div class="mhello" id="mhead" style="margin-top:26px">
+      <span class="greet js-greet"></span>
+      <h2>How are you <span class="gt">feeling</span> right now?</h2>
+      <p>Pick one. There are no wrong answers, and nothing in here tells you what to do unless you press something.</p>
     </div>
     <div class="moods" id="moodGrid"></div>
     <div id="mdetail"></div>
@@ -571,7 +606,7 @@ footer b{font-family:var(--display);color:var(--text)}
   </section>
 </main>
 
-<footer>made for <b>Intu</b> by Nafay · no rainbows were used in the making of this site (except as enemies)</footer>
+<footer>from <b>the princess</b> and <b>the knight</b> 🖤<br><span style="font-size:12.5px">no rainbows were used in the making of this site (except as enemies)</span></footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -592,7 +627,11 @@ const PAL=['#ff3d8b','#9b6bff','#a3e635','#67e8f9','#ffffff'];
   size();addEventListener('resize',size);
   const n=Math.min(110,Math.floor(innerWidth/11));
   for(let i=0;i<n;i++)fl.push({x:Math.random(),y:Math.random(),r:rand(.6,2.4),s:rand(.0003,.0012),d:rand(0,6.28)});
-  function tick(){x.clearRect(0,0,W,H);for(const f of fl){f.y+=f.s;f.d+=.008;if(f.y>1.02){f.y=-.02;f.x=Math.random()}x.beginPath();x.arc((f.x+Math.sin(f.d)*.012)*W,f.y*H,f.r*dpr,0,6.283);x.fillStyle='rgba(255,255,255,'+(.18+f.r/6)+')';x.fill()}if(!RM)requestAnimationFrame(tick)}
+  let shoot=null;
+  function tick(){x.clearRect(0,0,W,H);
+    if(!shoot&&Math.random()<.004)shoot={x:rand(.1,.9)*W,y:rand(0,.35)*H,vx:rand(9,15)*dpr*(Math.random()<.5?-1:1),vy:rand(4,7)*dpr,l:0};
+    if(shoot){shoot.l++;const tx=shoot.x-shoot.vx*9,ty=shoot.y-shoot.vy*9;const g=x.createLinearGradient(shoot.x,shoot.y,tx,ty);g.addColorStop(0,'rgba(255,255,255,'+Math.max(0,1-shoot.l/50)+')');g.addColorStop(1,'rgba(255,61,139,0)');x.strokeStyle=g;x.lineWidth=2*dpr;x.beginPath();x.moveTo(shoot.x,shoot.y);x.lineTo(tx,ty);x.stroke();shoot.x+=shoot.vx;shoot.y+=shoot.vy;if(shoot.l>50)shoot=null}
+    for(const f of fl){f.y+=f.s;f.d+=.008;if(f.y>1.02){f.y=-.02;f.x=Math.random()}x.beginPath();x.arc((f.x+Math.sin(f.d)*.012)*W,f.y*H,f.r*dpr,0,6.283);x.fillStyle='rgba(255,255,255,'+(.18+f.r/6)+')';x.fill()}if(!RM)requestAnimationFrame(tick)}
   tick();
 })();
 
@@ -620,6 +659,19 @@ function isBday(){const n=new Date();return n.getMonth()===4&&n.getDate()===16}
 function daysTo(t){const n=new Date();const today=new Date(n.getFullYear(),n.getMonth(),n.getDate());return Math.round((t-today)/864e5)}
 const fmtTime=d=>d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});
 
+/* ---------- alive background ---------- */
+const DEF_DRIFT=['🖤','❄️','✦','🍵','🌷','✨'];
+function setDrift(list,n,o){const box=$('#drifters');if(!box)return;box.innerHTML='';if(RM)n=Math.min(n,6);
+  for(let i=0;i<n;i++){const s=document.createElement('span');s.className='drifter';s.textContent=pick(list);
+    s.style.left=rand(0,98)+'%';s.style.fontSize=rand(13,28)+'px';s.style.animationDuration=rand(14,26)+'s';s.style.animationDelay=(-rand(0,26))+'s';
+    s.style.setProperty('--dx',rand(-90,90)+'px');s.style.setProperty('--rr',rand(-360,360)+'deg');s.style.setProperty('--o',(o*rand(.6,1)).toFixed(2));box.appendChild(s)}}
+setDrift(DEF_DRIFT,16,.32);
+if(window.matchMedia&&matchMedia('(pointer:fine)').matches){const gl=$('#glow');addEventListener('pointermove',e=>{gl.style.left=e.clientX+'px';gl.style.top=e.clientY+'px'},{passive:true})}
+document.addEventListener('pointerdown',e=>{if(RM||e.target.closest('.gwrap,.parea,.qcard,canvas'))return;
+  for(let i=0;i<6;i++){const s=document.createElement('span');s.className='spark';s.textContent=pick(['✦','✧','·','🖤']);s.style.left=e.clientX+'px';s.style.top=e.clientY+'px';s.style.color=pick(PAL);
+    const a=rand(0,Math.PI*2),d=rand(24,60);s.style.setProperty('--sx',Math.cos(a)*d+'px');s.style.setProperty('--sy',Math.sin(a)*d+'px');document.body.appendChild(s);setTimeout(()=>s.remove(),820)}},{passive:true});
+(function(){const h=new Date().getHours();const g=h<4?'Still awake, Intu? It\u2019s way past 10 🌙':h<7?'Up at 4 again, Intu? ☕':h<12?'Good morning, Intu ✦':h<17?'Good afternoon, Intu 🍵':h<22?'Good evening, Intu 🖤':'Past bedtime, Intu 🌙';$$('.js-greet').forEach(x=>x.textContent=g)})();
+
 /* ---------- router ---------- */
 const TABS=[['home','Home'],['moods','Moods'],['games','Games'],['spin','Spin'],['ask','Ask me'],['laws','Laws'],['journal','Journal'],['bday','16 May']];
 const nav=$('#nav');
@@ -645,6 +697,7 @@ document.addEventListener('click',e=>{
 (function(){
   const nm=$('#hname');const txt=nm.textContent;nm.innerHTML='';
   [...txt].forEach((ch,i)=>{const s=document.createElement('span');s.className='ch';s.textContent=ch;s.style.animationDelay=(.15+i*.09)+'s';nm.appendChild(s)});
+  setTimeout(()=>nm.classList.add('live'),1400);
   nm.addEventListener('click',()=>{$$('.ch',nm).forEach((s,i)=>{s.style.animationDelay=(i*.06)+'s';s.classList.remove('wig');void s.offsetWidth;s.classList.add('wig')});confAt(nm,60)});
   $$('.ch',nm).forEach(s=>s.addEventListener('mouseenter',()=>{s.style.animationDelay='0s';s.classList.remove('wig');void s.offsetWidth;s.classList.add('wig')}));
 
@@ -860,7 +913,9 @@ const MOODS=[
 ];
 const QS=["Are you okay? The real answer, not the polite one.","What's on your mind right now?","If someone could get you anything right now, what would it be?","What inspired the last thing you drew, wrote or made?","Why do you love the song you've been playing most?","What's a belief you've completely changed your mind about?","If your brain had a soundtrack today, what's playing?","What does being truly understood feel like to you?","What do you know about people that most people don't?","Which of the 48 laws do you actually disagree with?","What would your 4am self tell your 10pm self?","What makes a conversation feel good to you?","If you could live one day in Rome on repeat, what happens in it?","What small thing made you happy this week?","What are you quietly proud of?","What is happiness, to you, in one sentence?","Which fictional character understands you best?","What do you wish people asked you more often?","What's the most 'you' thing about you?","If your Sim had your exact personality, what would she be doing right now?","What's something you've never said out loud but think about a lot?","What's the best thing about being the way you are?"];
 
-function tileHTML(m,i){return `<button class="mood" data-mood="${m.id}" style="--c1:${m.c1};--c2:${m.c2};animation-delay:${i*.04}s"><span class="em">${m.em}</span><span><span class="nm">${m.nm}</span><span class="tg">${m.tg}</span></span></button>`}
+const MFX={anxious:['🫧','💙','✦'],sad:['🖤','🌧️','💧'],overthinking:['🌀','💭','❓'],stressed:['📋','✔️','🍵'],bored:['🎲','📺','🍬'],sleepless:['⭐','🌙','🐑'],annoyed:['😤','💢','✂️'],happy:['😂','✨','🎉'],early:['☀️','☕','🌅'],deep:['🧠','💭','✦']};
+function tileHTML(m,i){const f=(MFX[m.id]||['✦']).map((e,k)=>`<span style="left:${12+k*32+rand(-6,6)}%;animation-duration:${rand(5,8).toFixed(1)}s;animation-delay:${rand(0,5).toFixed(1)}s;--dx:${Math.round(rand(-20,20))}px">${e}</span>`).join('');
+  return `<button class="mood" data-mood="${m.id}" style="--c1:${m.c1};--c2:${m.c2};animation-delay:${(i*.05).toFixed(2)}s,0s;--sd:${rand(0,5).toFixed(1)}s;--bd:${rand(0,2).toFixed(1)}s"><span class="mfloat">${f}</span><span class="em">${m.em}</span><span class="nm">${m.nm}</span><span class="tg">${m.tg}</span></button>`}
 $('#homeMoods').innerHTML=MOODS.map(tileHTML).join('');
 $('#moodGrid').innerHTML=MOODS.map(tileHTML).join('');
 
@@ -870,7 +925,7 @@ function openMood(id){
   $('#moodGrid').hidden=true;$('#mhead').hidden=true;
   const d=$('#mdetail');
   d.innerHTML=`<div class="mdet" style="--c1:${m.c1};--c2:${m.c2}"><div class="mtop"><button class="btn sm ghost" id="mback">← All moods</button><span class="small">mood · ${esc(m.nm.toLowerCase())}</span></div><span class="big-em">${m.em}</span><h2>${esc(m.nm)}</h2><p class="mlede">${m.lede}</p>${m.html}</div>`;
-  document.documentElement.style.setProperty('--m1',m.c1);document.documentElement.style.setProperty('--m2',m.c2);
+  document.documentElement.style.setProperty('--m1',m.c1);document.documentElement.style.setProperty('--m2',m.c2);document.body.classList.add('inmood');setDrift(MFX[m.id],22,.55);
   $('#mback').onclick=()=>{closeMood();window.scrollTo({top:0,behavior:RM?'auto':'smooth'})};
   m.init&&m.init(d);
   window.scrollTo({top:0,behavior:'auto'});
@@ -879,7 +934,7 @@ function closeMood(){
   moodClean.forEach(f=>{try{f()}catch(e){}});moodClean=[];
   const d=$('#mdetail');if(d)d.innerHTML='';
   $('#moodGrid').hidden=false;$('#mhead').hidden=false;
-  document.documentElement.style.removeProperty('--m1');document.documentElement.style.removeProperty('--m2');
+  document.documentElement.style.removeProperty('--m1');document.documentElement.style.removeProperty('--m2');if(document.body.classList.contains('inmood')){document.body.classList.remove('inmood');setDrift(DEF_DRIFT,16,.32)}
 }
 
 /* ---------- games ---------- */
