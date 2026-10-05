@@ -125,15 +125,7 @@ textarea{resize:vertical;min-height:110px}
   color:var(--text);text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
   box-shadow:0 16px 34px -20px var(--c1),inset 0 1px 0 #fff;
   transition:transform .35s cubic-bezier(.3,1.5,.5,1),box-shadow .3s;animation:boxIn .6s cubic-bezier(.3,1.5,.5,1) both,grad 7s ease-in-out infinite alternate}
-/* glitter: two dot layers that twinkle out of phase, plus tiny sparkles */
-.mood::before,.mood::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
-.mood::before{background-image:radial-gradient(circle,#fff 0 1.1px,transparent 1.7px),radial-gradient(circle,color-mix(in srgb,var(--c1) 70%,#fff) 0 .9px,transparent 1.5px),radial-gradient(circle,#fff 0 .7px,transparent 1.2px);background-size:26px 22px,19px 27px,13px 15px;background-position:0 0,9px 6px,4px 11px;animation:twinkA 2.2s ease-in-out infinite}
-.mood::after{background-image:radial-gradient(circle,#fff 0 1.3px,transparent 1.9px),radial-gradient(circle,color-mix(in srgb,var(--c2) 70%,#fff) 0 1px,transparent 1.6px);background-size:23px 29px,31px 21px;background-position:12px 4px,5px 15px;animation:twinkA 2.2s ease-in-out infinite reverse}
-@keyframes twinkA{0%,100%{opacity:.25}50%{opacity:1}}
-.mood .gl{position:absolute;z-index:-1;color:#fff;font-size:12px;line-height:1;text-shadow:0 0 6px #fff,0 0 10px var(--c1);animation:sparkle 2.4s ease-in-out infinite;pointer-events:none}
-@keyframes sparkle{0%,100%{transform:scale(.2) rotate(0);opacity:0}50%{transform:scale(1.15) rotate(90deg);opacity:1}}
 .mood:hover{transform:translateY(-7px) scale(1.03) rotate(-1.5deg);box-shadow:0 26px 44px -18px var(--c1),0 0 0 3px #fff}
-.mood:hover::before,.mood:hover::after{animation-duration:1s}
 .mood:active{transform:scale(.94)}
 .mood .em{font-size:48px;line-height:1;margin-bottom:6px;display:inline-block;filter:drop-shadow(0 6px 10px rgba(150,60,110,.25));animation:float 3s ease-in-out infinite;animation-delay:var(--bd,0s)}
 .mood:hover .em{animation:wig .6s}
@@ -969,8 +961,7 @@ const QS=["Are you okay? The real answer, not the polite one.","What's on your m
 
 const MFX={anxious:['🫧','💙','✦'],sad:['🖤','🌧️','💧'],overthinking:['🌀','💭','❓'],stressed:['📋','✔️','🍵'],bored:['🎲','📺','🍬'],sleepless:['⭐','🌙','🐑'],annoyed:['😤','💢','✂️'],happy:['😂','✨','🎉'],early:['☀️','☕','🌅'],deep:['🧠','💭','✦']};
 function tileHTML(m,i){const f=(MFX[m.id]||['✦']).map((e,k)=>`<span style="left:${12+k*32+rand(-6,6)}%;animation-duration:${rand(5,8).toFixed(1)}s;animation-delay:${rand(0,5).toFixed(1)}s;--dx:${Math.round(rand(-20,20))}px">${e}</span>`).join('');
-  const gl=Array.from({length:5},()=>`<span class="gl" style="left:${rand(6,90).toFixed(0)}%;top:${rand(6,88).toFixed(0)}%;animation-delay:${rand(0,2.4).toFixed(2)}s;font-size:${rand(8,15).toFixed(0)}px">✦</span>`).join('');
-  return `<button class="mood" data-mood="${m.id}" style="--c1:${m.c1};--c2:${m.c2};animation-delay:${(i*.05).toFixed(2)}s,0s;--sd:${rand(0,5).toFixed(1)}s;--bd:${rand(0,2).toFixed(1)}s"><span class="mfloat">${f}</span>${gl}<span class="em">${m.em}</span><span class="nm">${m.nm}</span><span class="tg">${m.tg}</span></button>`}
+  return `<button class="mood" data-mood="${m.id}" style="--c1:${m.c1};--c2:${m.c2};animation-delay:${(i*.05).toFixed(2)}s,0s;--sd:${rand(0,5).toFixed(1)}s;--bd:${rand(0,2).toFixed(1)}s"><span class="mfloat">${f}</span><span class="em">${m.em}</span><span class="nm">${m.nm}</span><span class="tg">${m.tg}</span></button>`}
 $('#homeMoods').innerHTML=MOODS.map(tileHTML).join('');
 $('#moodGrid').innerHTML=MOODS.map(tileHTML).join('');
 
